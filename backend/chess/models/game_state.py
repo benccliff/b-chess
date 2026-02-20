@@ -9,7 +9,7 @@ class GameState:
     board: Board
     turn: Color
     castling_rights: CastlingRights
-    en_passant_target: Optional[Square]  # Square a pawn can capture into (the empty square behind captured pawn)
+    en_passant_target: Optional[Square]
     halfmove_clock: int
     fullmove_number: int
 

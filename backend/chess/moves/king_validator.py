@@ -15,7 +15,6 @@ def king_moves(state: GameState, from_sq: Square) -> Iterator[Move]:
 
     color = piece.color
 
-    # Normal king moves
     for dr, dc in _KING_DELTAS:
         to_row, to_col = row + dr, col + dc
         if not on_board(to_row, to_col):
@@ -24,7 +23,6 @@ def king_moves(state: GameState, from_sq: Square) -> Iterator[Move]:
         if target is None or target.color != color:
             yield Move(from_sq, (to_row, to_col))
 
-    # Castling
     yield from _castling_moves(state, from_sq, color)
 
 
@@ -38,7 +36,6 @@ def _castling_moves(state: GameState, from_sq: Square, color: Color) -> Iterator
 
     board = state.board
 
-    # Kingside castling
     ks_right = cr.white_kingside if color == Color.WHITE else cr.black_kingside
     if ks_right:
         # Squares between king and rook must be empty: f1(col5), g1(col6)
@@ -48,7 +45,6 @@ def _castling_moves(state: GameState, from_sq: Square, color: Color) -> Iterator
                 board.get(back_row, 7).piece_type == PieceType.ROOK):  # type: ignore[union-attr]
             yield Move(from_sq, (back_row, 6))
 
-    # Queenside castling
     qs_right = cr.white_queenside if color == Color.WHITE else cr.black_queenside
     if qs_right:
         # Squares between king and rook must be empty: d1(col3), c1(col2), b1(col1)

@@ -15,11 +15,10 @@ def pawn_moves(state: GameState, from_sq: Square) -> Iterator[Move]:
         return
 
     color = piece.color
-    direction = -1 if color == Color.WHITE else 1  # White pawns move up (decreasing row)
+    direction = -1 if color == Color.WHITE else 1
     start_row = 6 if color == Color.WHITE else 1
     promotion_row = 0 if color == Color.WHITE else 7
 
-    # Single push
     to_row = row + direction
     if on_board(to_row, col) and state.board.get(to_row, col) is None:
         if to_row == promotion_row:
@@ -28,13 +27,11 @@ def pawn_moves(state: GameState, from_sq: Square) -> Iterator[Move]:
         else:
             yield Move(from_sq, (to_row, col))
 
-            # Double push from starting rank
             if row == start_row:
                 dbl_row = row + 2 * direction
                 if state.board.get(dbl_row, col) is None:
                     yield Move(from_sq, (dbl_row, col))
 
-    # Captures (diagonal)
     for dc in (-1, 1):
         to_col = col + dc
         if not on_board(to_row, to_col):

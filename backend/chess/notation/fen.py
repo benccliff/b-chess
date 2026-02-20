@@ -31,13 +31,12 @@ def parse_fen(fen: str) -> GameState:
 
     position_str, turn_str, castling_str, ep_str, halfmove_str, fullmove_str = parts
 
-    # Parse board
     ranks = position_str.split('/')
     if len(ranks) != 8:
         raise ValueError(f"Invalid FEN position: expected 8 ranks, got {len(ranks)}")
 
     rows: list[tuple[Optional[Piece], ...]] = []
-    for rank_str in ranks:  # rank_str for rank 8 down to rank 1
+    for rank_str in ranks:
         row: list[Optional[Piece]] = []
         for ch in rank_str:
             if ch.isdigit():
@@ -53,7 +52,6 @@ def parse_fen(fen: str) -> GameState:
 
     board = Board(tuple(rows))
 
-    # Parse turn
     if turn_str == 'w':
         turn = Color.WHITE
     elif turn_str == 'b':
@@ -61,7 +59,6 @@ def parse_fen(fen: str) -> GameState:
     else:
         raise ValueError(f"Invalid FEN turn: {turn_str!r}")
 
-    # Parse castling rights
     wk = 'K' in castling_str
     wq = 'Q' in castling_str
     bk = 'k' in castling_str
@@ -73,14 +70,12 @@ def parse_fen(fen: str) -> GameState:
         black_queenside=bq,
     )
 
-    # Parse en passant target
     en_passant_target: Optional[Square] = None
     if ep_str != '-':
         if len(ep_str) != 2:
             raise ValueError(f"Invalid en passant square: {ep_str!r}")
         en_passant_target = sq_to_coords(ep_str)
 
-    # Parse clocks
     try:
         halfmove_clock = int(halfmove_str)
         fullmove_number = int(fullmove_str)
@@ -98,7 +93,6 @@ def parse_fen(fen: str) -> GameState:
 
 
 def serialize_fen(state: GameState) -> str:
-    # Board
     rank_strs: list[str] = []
     for row in range(8):
         rank_str = ""
@@ -117,10 +111,8 @@ def serialize_fen(state: GameState) -> str:
         rank_strs.append(rank_str)
     position_str = '/'.join(rank_strs)
 
-    # Turn
     turn_str = 'w' if state.turn == Color.WHITE else 'b'
 
-    # Castling
     cr = state.castling_rights
     castling_str = (
         ('K' if cr.white_kingside else '') +
@@ -129,7 +121,6 @@ def serialize_fen(state: GameState) -> str:
         ('q' if cr.black_queenside else '')
     ) or '-'
 
-    # En passant
     ep_str = coords_to_sq(*state.en_passant_target) if state.en_passant_target else '-'
 
     return f"{position_str} {turn_str} {castling_str} {ep_str} {state.halfmove_clock} {state.fullmove_number}"

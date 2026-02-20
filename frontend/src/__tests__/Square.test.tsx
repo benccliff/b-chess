@@ -1,10 +1,10 @@
 import { vi, describe, it, expect } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Square from '../components/Square/Square'
 
 describe('Square', () => {
   it('renders a piece', () => {
-    render(
+    const { container } = render(
       <Square
         sq="e4"
         piece={{ color: 'white', piece_type: 'pawn' }}
@@ -14,7 +14,7 @@ describe('Square', () => {
         onClick={vi.fn()}
       />,
     )
-    expect(screen.getByText('♙')).toBeTruthy()
+    expect(container.querySelector('img')).toBeTruthy()
   })
 
   it('renders empty without piece', () => {
