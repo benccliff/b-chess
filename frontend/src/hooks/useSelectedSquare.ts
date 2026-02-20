@@ -26,7 +26,7 @@ export function useSelectedSquare(
       ? gameState.legal_moves
           .filter((m) => m.from_sq === selectedSquare)
           .map((m) => m.to_sq)
-          .filter((sq, i, arr) => arr.indexOf(sq) === i) // deduplicate (promotion squares appear 4x)
+          .filter((sq, i, arr) => arr.indexOf(sq) === i)
       : [];
 
   const handleSquareClick = useCallback(
@@ -34,7 +34,6 @@ export function useSelectedSquare(
       if (!gameState) return;
 
       if (selectedSquare && legalTargets.includes(sq)) {
-        // Check if this move requires promotion
         const promotionMoves = gameState.legal_moves.filter(
           (m) => m.from_sq === selectedSquare && m.to_sq === sq && m.promotion !== null,
         );
@@ -48,7 +47,6 @@ export function useSelectedSquare(
         return;
       }
 
-      // Select or re-select a piece of the current player's color
       const piece = getPieceAt(gameState, sq);
       if (piece && piece.color === gameState.turn) {
         setSelectedSquare(sq);
