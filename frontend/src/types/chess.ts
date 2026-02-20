@@ -23,3 +23,8 @@ export interface GameState {
   status: GameStatus;
   legal_moves: MoveData[];
 }
+
+export interface HistoryEntry {
+  san: string;
+  fenAfter: string;
+}

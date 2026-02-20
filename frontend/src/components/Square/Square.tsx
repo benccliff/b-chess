@@ -18,7 +18,7 @@ export default function Square({ sq, piece, isLight, isSelected, isLegalTarget, 
       : isLight ? "#f0d9b5" : "#b58863";
 
   return (
-    <div style={{ ...styles.square, backgroundColor: bg }} onClick={() => onClick(sq)}>
+    <div data-sq={sq} style={{ ...styles.square, backgroundColor: bg }} onClick={() => onClick(sq)}>
       {piece && <Piece piece={piece} />}
       {isLegalTarget && !piece && <div style={styles.dot} />}
     </div>

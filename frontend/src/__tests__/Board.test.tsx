@@ -28,4 +28,32 @@ describe('Board', () => {
     const squares = container.firstChild?.childNodes
     expect(squares?.length).toBe(64)
   })
+
+  it('flipped=false renders a8 as first square', () => {
+    const { container } = render(
+      <Board
+        gameState={makeGameState()}
+        selectedSquare={null}
+        legalTargets={[]}
+        onSquareClick={vi.fn()}
+        flipped={false}
+      />,
+    )
+    const first = container.firstChild?.firstChild as HTMLElement
+    expect(first.getAttribute('data-sq')).toBe('a8')
+  })
+
+  it('flipped=true renders h1 as first square', () => {
+    const { container } = render(
+      <Board
+        gameState={makeGameState()}
+        selectedSquare={null}
+        legalTargets={[]}
+        onSquareClick={vi.fn()}
+        flipped={true}
+      />,
+    )
+    const first = container.firstChild?.firstChild as HTMLElement
+    expect(first.getAttribute('data-sq')).toBe('h1')
+  })
 })
