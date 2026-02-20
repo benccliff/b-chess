@@ -18,12 +18,12 @@ export default function App() {
     [playCheck, playGameEnd, playCapture, playMove],
   );
 
-  const { gameState, isLoading, error, clearError, startNewGame, submitMove } = useGame(playNewGame, handleGameEvent);
+  const { gameState, moveHistory, isLoading, error, clearError, startNewGame, submitMove } = useGame(playNewGame, handleGameEvent);
 
   return (
     <div style={styles.root}>
       {isLoading && !gameState && <p style={styles.loading}>Loading...</p>}
-      {gameState && <GamePage gameState={gameState} onMove={submitMove} onNewGame={startNewGame} />}
+      {gameState && <GamePage gameState={gameState} moveHistory={moveHistory} onMove={submitMove} onNewGame={startNewGame} />}
       <ErrorToast message={error} onDismiss={clearError} />
     </div>
   );

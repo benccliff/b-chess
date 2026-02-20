@@ -63,4 +63,45 @@ describe('useGame', () => {
     await act(async () => { resolve!(mockState) })
     expect(result.current.isLoading).toBe(false)
   })
+
+  it('moveHistory is empty after game creation', async () => {
+    vi.spyOn(api, 'createGame').mockResolvedValue(mockState)
+
+    const { result } = renderHook(() => useGame())
+    await act(async () => {})
+    expect(result.current.moveHistory).toEqual([])
+  })
+
+  it('moveHistory grows by 1 after submitMove', async () => {
+    vi.spyOn(api, 'createGame').mockResolvedValue(mockState)
+    vi.spyOn(api, 'makeMove').mockResolvedValue(mockState2)
+
+    const { result } = renderHook(() => useGame())
+    await act(async () => {})
+
+    await act(async () => {
+      await result.current.submitMove('e2', 'e4')
+    })
+
+    expect(result.current.moveHistory).toHaveLength(1)
+    expect(result.current.moveHistory[0].fenAfter).toBe(mockState2.fen)
+  })
+
+  it('moveHistory resets on startNewGame', async () => {
+    vi.spyOn(api, 'createGame').mockResolvedValue(mockState)
+    vi.spyOn(api, 'makeMove').mockResolvedValue(mockState2)
+
+    const { result } = renderHook(() => useGame())
+    await act(async () => {})
+
+    await act(async () => {
+      await result.current.submitMove('e2', 'e4')
+    })
+    expect(result.current.moveHistory).toHaveLength(1)
+
+    await act(async () => {
+      result.current.startNewGame()
+    })
+    expect(result.current.moveHistory).toHaveLength(0)
+  })
 })
